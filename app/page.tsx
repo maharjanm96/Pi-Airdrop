@@ -24,19 +24,7 @@ export default function Home() {
         <nav>
           <ul className="flex space-x-6 text-white">
             <li>
-              <Link href="/" className="hover:text-amber-300 transition">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-amber-300 transition">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link href="/faq" className="hover:text-amber-300 transition">
-                FAQ
-              </Link>
+              <Link href="/" className="hover:text-amber-300 transition"></Link>
             </li>
           </ul>
         </nav>
@@ -128,9 +116,6 @@ export default function Home() {
                   </li>
                 </ul>
                 <div className="mt-6">
-                  {/* <Button className="w-full bg-amber-600 hover:bg-amber-500 cursor-pointer text-white">
-                    CLAIM 314 PI NETWORK COINS
-                  </Button> */}
                   <AirdropClaimDialog />
                 </div>
               </CardContent>

@@ -1,6 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { login } from "@/actions/login";
+import { Button } from "@/components/custom/customButton";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
 import {
   Form,
   FormControl,
@@ -10,24 +13,35 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { AuthSchema, authSchema } from "@/schemas/authSchema";
+import { loginSchema, LoginSchema } from "@/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
-  const form = useForm<AuthSchema>({
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
+  const form = useForm<LoginSchema>({
     defaultValues: {
       email: "",
       password: "",
     },
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: AuthSchema) => {
-    console.log(data);
+  const onSubmit = async (values: LoginSchema) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
   };
 
   return (
@@ -40,11 +54,9 @@ const LoginForm = () => {
           height={200}
           className="object-contain"
         />
-        <p className="mt-4 text-2xl font-medium">Log in to Pi Network Admin</p>
-
-        <div className="my-7 w-full overflow-hidden">
-          <Separator />
-        </div>
+        <p className="mt-4 text-xl font-bold mb-4 tracking-tight">
+          Log in to Pi Network Admin
+        </p>
 
         <Form {...form}>
           <form
@@ -62,6 +74,7 @@ const LoginForm = () => {
                       type="email"
                       placeholder="Email"
                       className="w-full"
+                      disabled={isPending}
                       {...field}
                     />
                   </FormControl>
@@ -80,6 +93,7 @@ const LoginForm = () => {
                       type="password"
                       placeholder="Password"
                       className="w-full"
+                      disabled={isPending}
                       {...field}
                     />
                   </FormControl>
@@ -87,21 +101,27 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
+            <FormError message={error} />
+            <FormSuccess message={success} />
             <Button
               type="submit"
-              className="mt-4 w-full cursor-pointer bg-amber-600 hover:bg-amber-700"
+              disabled={isPending}
+              className="mt-4 w-full cursor-pointer bg-amber-500 hover:bg-amber-600"
             >
               Continue with Email
             </Button>
           </form>
         </Form>
 
-        <div className="mt-5 space-y-5">
+        <div className="mt-5">
+          <p className="text-sm text-muted-foreground text-center">
+            Don&apos;t have an account?
+          </p>
           <Link
-            href="#"
-            className="text-sm block underline text-muted-foreground text-center"
+            href="signup"
+            className="text-sm block underline text-muted-foreground text-center hover:text-amber-500"
           >
-            Forgot your password?
+            SignUp
           </Link>
         </div>
       </div>
