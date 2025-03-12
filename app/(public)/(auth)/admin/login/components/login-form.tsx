@@ -33,13 +33,15 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  // const router = useRouter();
+
   const onSubmit = async (values: LoginSchema) => {
     setError("");
     setSuccess("");
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        setSuccess(data?.error);
       });
     });
   };
@@ -108,7 +110,7 @@ const LoginForm = () => {
               disabled={isPending}
               className="mt-4 w-full cursor-pointer bg-amber-500 hover:bg-amber-600"
             >
-              Continue with Email
+              Login
             </Button>
           </form>
         </Form>

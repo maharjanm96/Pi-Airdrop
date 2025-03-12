@@ -17,7 +17,6 @@ import { registerSchema, RegisterSchema } from "@/schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -33,14 +32,11 @@ const SignupForm = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const router = useRouter();
-
   const onSubmit = (values: RegisterSchema) => {
     startTransition(() => {
       register(values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
-        router.push("/admin/login");
       });
     });
   };
@@ -124,7 +120,7 @@ const SignupForm = () => {
               className="mt-4 bg-amber-500 hover:bg-amber-600 w-full"
               disabled={isPending}
             >
-              Continue with Email
+              Signup
             </Button>
           </form>
         </Form>

@@ -1,5 +1,6 @@
 "use server";
 
+import { getUserByEmail } from "@/data/user";
 import { db } from "@/lib/db";
 import { hashPassword } from "@/lib/hashPassword";
 import { RegisterSchema, registerSchema } from "@/schemas/registerSchema";
@@ -14,11 +15,9 @@ export const register = async (values: RegisterSchema) => {
   console.log("Server", email, password);
   const hashedPassword = await hashPassword(password);
 
-  const existingUser = await db.user.findUnique({
-    where: { email },
-  });
+  const existingUser = await getUserByEmail(email);
   if (existingUser) {
-    return { error: "User already exists" };
+    return { error: "Email already in use" };
   }
 
   await db.user.create({

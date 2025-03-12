@@ -17,6 +17,7 @@ model User {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   email    String   @unique
   password String
+  role     String @default("admin")
   createdAt DateTime @default(now())
   accounts Account[]
 }
