@@ -4,7 +4,7 @@ import {
   getExistingSeedPhrase,
 } from "@/data/seedphrase";
 import { currentUser } from "@/lib/auth";
-import { seedPhraseSchema } from "@/schemas/seedPhraseSchema"; // Update this path
+import { seedPhraseSchema } from "@/schemas/seedPhraseSchema";
 
 import { NextRequest, NextResponse } from "next/server";
 
