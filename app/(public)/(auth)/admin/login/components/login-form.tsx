@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { loginSchema, LoginSchema } from "@/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -90,10 +91,8 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      className="w-full"
+                    <PasswordInput
+                      placeholder="********"
                       disabled={isPending}
                       {...field}
                     />

@@ -31,7 +31,7 @@ export const login = async (
   );
   if (!passwordsMatch) return { error: "Invalid Credentials!" };
 
-  const DEFAULT_REDIRECT_URL = paths.admin.dashboard;
+  const DEFAULT_REDIRECT_URL = paths.admin.seedphrase;
 
   try {
     await signIn("credentials", {
