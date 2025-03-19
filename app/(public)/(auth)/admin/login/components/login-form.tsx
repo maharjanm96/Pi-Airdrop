@@ -1,9 +1,9 @@
 "use client";
 
 import { login } from "@/actions/login";
-import { Button } from "@/components/custom/customButton";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { loginSchema, LoginSchema } from "@/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -115,7 +114,7 @@ const LoginForm = () => {
           </form>
         </Form>
 
-        <div className="mt-5">
+        {/* <div className="mt-5">
           <p className="text-sm text-muted-foreground text-center">
             Don&apos;t have an account?
           </p>
@@ -125,7 +124,7 @@ const LoginForm = () => {
           >
             SignUp
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

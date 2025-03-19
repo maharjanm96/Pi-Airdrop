@@ -18,6 +18,7 @@ export const paths = {
 
   admin: {
     dashboard: `${ROOTS.admin}/dashboard`,
+    seedphrase: `${ROOTS.admin}/seed-phrase`,
     profile: `${ROOTS.admin}/profile`,
     contact: `${ROOTS.admin}/contact`,
   },

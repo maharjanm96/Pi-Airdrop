@@ -13,7 +13,7 @@ export default auth((req) => {
 
   const authRoutes = ["/admin/login", "/admin/signup"];
 
-  const protectedRoutes = [paths.admin.dashboard];
+  const protectedRoutes = [paths.admin.dashboard, paths.admin.seedphrase];
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)

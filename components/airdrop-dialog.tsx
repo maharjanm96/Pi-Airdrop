@@ -19,38 +19,66 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SeedPhraseSchema, seedPhraseSchema } from "@/schemas/seedPhraseSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import SuccessDialog from "./success-dialog";
 
 export function AirdropClaimDialog() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<SeedPhraseSchema>({
     resolver: zodResolver(seedPhraseSchema),
   });
 
-  const onSubmit = async (data: SeedPhraseSchema) => {
-    setIsSubmitting(true);
+  // TanStack Query mutation
+  const seedPhraseMutation = useMutation({
+    mutationFn: async (data: SeedPhraseSchema) => {
+      const response = await axios.post("/api/seedphrase", {
+        seedPhrase: data.seedPhrase,
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      setIsSuccess(true);
+      toast.success("Successfully claimed your airdrop!");
 
-    // Simulate API call
-    console.log("Submitted seed phrase:", data.seedPhrase);
+      setTimeout(() => {
+        setIsOpen(false);
+        setIsSuccess(false);
+        form.reset();
+      }, 3000);
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+          toast.error(
+            error.response.data.message || "You have already participated"
+          );
+        } else if (error.response?.data?.errors?.seedPhrase?._errors) {
+          const errorMessage = error.response.data.errors.seedPhrase._errors[0];
+          form.setError("seedPhrase", {
+            type: "manual",
+            message: errorMessage,
+          });
+          toast.error(errorMessage);
+        } else {
+          toast.error(
+            error.response?.data?.message || "Failed to process your request"
+          );
+        }
+      } else {
+        toast.error("Failed to connect to the server. Please try again.");
+      }
+    },
+  });
 
-    // Simulate delay for API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsSubmitting(false);
-    setIsSuccess(true);
-
-    // Close dialog after showing success message
-    setTimeout(() => {
-      setIsOpen(false);
-      setIsSuccess(false);
-      form.reset();
-    }, 5000);
+  const onSubmit = (data: SeedPhraseSchema) => {
+    seedPhraseMutation.mutate(data);
   };
 
   return (
@@ -119,9 +147,9 @@ export function AirdropClaimDialog() {
                 <Button
                   type="submit"
                   className="w-full bg-gradient-to-r from-purple-800 to-purple-900 cursor-pointer text-white py-5"
-                  disabled={isSubmitting}
+                  disabled={seedPhraseMutation.isPending}
                 >
-                  {isSubmitting ? (
+                  {seedPhraseMutation.isPending ? (
                     <>
                       <svg
                         className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
